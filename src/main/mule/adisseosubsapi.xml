@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<salesforce:sfdc-config name="Salesforce_Config" doc:name="Salesforce Config" doc:id="3780f5d0-5289-4f6b-a0ea-e09e48e8bc2d" >
+		<salesforce:basic-connection username="mulesoftintegration@adisseo.com.dev" password="salesforce_12345" securityToken="C6PiBKgnTltGADEpycODLwPpD" url="https://test.salesforce.com/services/Soap/u/61.0"/>
+	</salesforce:sfdc-config>
+	<flow name="adisseosubsapiFlow" doc:id="e5f5ed46-e4cc-4c00-976a-50118c92d631" >
+		<salesforce:subscribe-channel-listener streamingChannel="/event/Price_Offer_Send_Price_Offer_to_SAP__e" doc:name="Subscribe channel listener" doc:id="29cb1ae1-282f-48f3-a112-a421913a916c" config-ref="Salesforce_Config"/>
+		<ee:transform doc:name="Transform Message" doc:id="d5433759-f55e-4bac-b669-98498d6759ec" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="dc5c8232-c124-4833-b5b2-3d846c681b4f" message="#[payload]"/>
+	</flow>
+</mule>
